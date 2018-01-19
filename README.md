@@ -13,7 +13,7 @@ Project's purpose is creating an smart home system as a hobby, it is designed to
 
 ### Modules :
 1- Temprature module   
-2- Web Interface Module ( socket Iterface )  
+2- Web Interface Module ( socket Interface )  
 3- Dynamic DNS module, if network is available ( NAT ), you can access via internet without using static IP.  
 4- Twillio Module, if you have an account , Home Security System can call or text you by using you account for security
 or another issues.   
