@@ -27,8 +27,8 @@ or another issues.
 
 
 Referances :
-dygraph,smooth-plotter ; https://github.com/danvk/dygraphs
-ipgetter pack ; https://pypi.python.org/pypi/ipgetter
-twilio.rest ; https://www.twilio.com/
+dygraph,smooth-plotter ; https://github.com/danvk/dygraphs    
+ipgetter pack ; https://pypi.python.org/pypi/ipgetter  
+twilio.rest ; https://www.twilio.com/  
 
 
