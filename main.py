@@ -107,8 +107,8 @@ class AppConfigs():
 def send_mail(message):
     try:
         appc = AppConfigs()
-        fromaddr =  appc.AppKey('FROM_MAIL')#'berksahan@gmail.com'
-        username =  appc.AppKey('FROM_MAIL_USER')#'berksahan'
+        fromaddr =  appc.AppKey('FROM_MAIL')#'xxx@gmail.com'
+        username =  appc.AppKey('FROM_MAIL_USER')#'xx'
         password =  appc.AppKey('FROM_MAIL_PASSW')#
         smtpAddr =  appc.AppKey('FROM_MAIL_SMTP')# smtp.gmail.com:587
         notifSubject =  appc.AppKey('NOTIFIY_MAIL_SUBJECT')#Home Security System Notification 
@@ -253,7 +253,7 @@ class temprature_checker ( threading.Thread ):
                 break            
             Home_temprature ,fahrenaight = read_temp()
             if Home_temprature >= 48 :
-                send_mail("ev sicakligi : "+str(Home_temprature))
+                send_mail("home tempr : "+str(Home_temprature))
             if timeCnt >= 60:
                 timeCnt = 0
                 appc = AppConfigs()
@@ -317,7 +317,7 @@ class vpn_service(threading.Thread):
                     if not req == b'' and not req == 'exit' :
                         print('VPN_SERVICE>>ROUTING TO SLAVE')
                         sock.listen(1)
-                        sock.settimeout(30)#30 sn icinde baglanamaz ise timeout firlat
+                        sock.settimeout(30)#30 sec to read
                      
                         procOk = False
                         cntTry = 0
@@ -377,7 +377,7 @@ class vpn_service(threading.Thread):
             iis.close()
             print('VPN_SERVICE>>CLOSED')
         except Exception,e:
-            send_mail_to('berksahan@gmail.com','VPN Service Crashed',"Process tamamen kirilidi : \n"+str(e))
+            send_mail_to('berksahan@gmail.com','VPN Service Crashed',"vpn Process crached, fatalerror  : \n"+str(e))
             sock.close()
             iis.close()
             print('VPN_SERVICE>>CRASHED DETAILS:'+str(e))
@@ -738,11 +738,11 @@ class Close_button ( threading.Thread ):
 
 class Alarm_Thread (threading.Thread) :
    def run( self ) :
-	  alarm_start(13,60*3) # 13 sn bekle sifre girilmez ise 3 dk cal
+	  alarm_start(13,60*3) # wait 13 sec, alarm fired 3 min
 
 def alarm_start(delay, alarm_time):
    while True:
-	  if isAuth.empty() : # sifre bekleniyor
+	  if isAuth.empty() : # passw waiting
 		 if delay:
 			time.sleep(1)
 			delay = delay -1
@@ -778,9 +778,9 @@ def alarm_close():
 #-----------------------------------------------------------------------------
 class Warning_Thread (threading.Thread) :
    def run( self ) :
-	  send_sms("Evde biri var",True)
+	  send_sms("Alarm triggered",True)
 	  print ("\nSMS sended...\n")
-	  send_mail("Evde biri var")
+	  send_mail("Alarm Triggered")
 
 
 #------------------------------------------------------------------------------------------------
@@ -927,7 +927,7 @@ def start_delay():
 def start_statu_control():
     if  (not Web_Input.empty() and Web_Input.get() == "start"):
         return True
-    else:# start dosyas kontrol edilecek
+    else:# started file control
        if( os.path.isfile(check_system_status_file) ):
            return True
         
@@ -954,17 +954,17 @@ def main_proc():
    if len(p_phones) > 0 :
        global phone_list
        phone_list = p_phones
-       print("---Telefonlar : \n"+str(phone_list))
+       print("---Phones : \n"+str(phone_list))
    else :
-       print ("#### Telefon listesi zorunludur... ###")
+       print ("#### We need Phone list ... ###")
        return
 
    if len(p_mailaddrs) > 0:
        global toaddrs
        toaddrs = p_mailaddrs
-       print("---Mail gonderilecek liste : \n"+str(toaddrs))
+       print("---Mail list : \n"+str(toaddrs))
    else:
-       print (" ### Mail listesi zorunludur... ###")
+       print (" ### We need Mail list ... ###")
        return
 
    signal.signal(signal.SIGINT,signal_handler)
@@ -1076,23 +1076,23 @@ def main_proc():
                                    with isAuth.mutex:
                                       isAuth.queue.clear()
                                    web_face.set_output("<font color = \"green\">Protection mode off - Access granted " +time.ctime()+"</font>")
-                                   print("buton bekleniyor")
+                                   print("button waiting")
                                    while GPIO.input(BUTTON_CLOSE) == 1:# butona basili tutulursa cekilmedigi surece bekle
                                        pass
-                                   print("buton brakildi")
+                                   print("button released")
                                    time.sleep(1)
                                    break
 
                             time.sleep(5)
 
-                            print ("No Access Granted !! System Reactivated...")
+                            print ("There is No Access Granted !! System Reactivated...")
                             web_face.set_output("No Access granted !! System Reactivated : "+time.ctime())
 
                      else:
                             if not isAuth.empty() :
                                    with isAuth.mutex:
                                       isAuth.queue.clear()
-                                   web_face.set_output("Protection mode off - Access granted " +time.ctime())
+                                   web_face.set_output("Protection mode off - Access Granted " +time.ctime())
                                    break
                             time.sleep(0.2)
 
